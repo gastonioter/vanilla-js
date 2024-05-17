@@ -10,6 +10,15 @@ html {
   font-size: 62.5%;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:link,
+a:visited {
+  color: #000;
+}
+
 body {
   font-size: 1.6rem;
   font-family: "Inter", sans-serif;
