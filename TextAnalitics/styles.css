@@ -69,16 +69,16 @@ header {
   background-color: #fff;
 }
 
-textarea {
-  all: unset;
-}
-
 .word-analitic__input {
   flex: 2;
   padding: 3rem 4rem;
   font-size: 2.2rem;
   color: black;
   font: inherit;
+  /* white-space: nowrap; */
+  resize: none;
+  height: 100%;
+  border: none;
 }
 textarea::placeholder {
   font-weight: 500;
@@ -86,7 +86,7 @@ textarea::placeholder {
 }
 .stats {
   flex: 1;
-
+  max-width: 420px;
   display: flex;
   flex-wrap: wrap;
   grid-template-columns: repeat(2, 1fr);
@@ -95,7 +95,9 @@ textarea::placeholder {
 }
 
 .stat {
-  flex: 1 150px;
+  flex: 1;
+  min-width: 150px;
+  overflow: hidden;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -106,7 +108,11 @@ textarea::placeholder {
 .stat__value {
   font-size: 3rem;
   color: #4d5457;
+  width: 100%;
   font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .stat__value--most-repeted,
@@ -153,6 +159,9 @@ footer {
   .stat__value {
     font-size: 2rem;
   }
+  .stats {
+    max-width: initial;
+  }
   .stat {
     padding: 1.4rem;
   }
@@ -175,6 +184,7 @@ footer {
     border-radius: 0px;
     transform: translateX(0);
   }
+
   .stat {
     padding: 0;
   }
