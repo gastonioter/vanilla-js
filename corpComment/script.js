@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 const MAX_LENGTH_ALLOWED = 155;
 const BASE_API = "https://bytegrad.com/course-assets/js/1/api";
-
+let feedbacksArr = [];
 function init() {
   const textareaEl = document.querySelector(".form__textarea");
   const counterEl = document.querySelector(".counter");
@@ -10,11 +10,35 @@ function init() {
   const submitBtn = document.querySelector(".submit-btn");
   const feedbacksListEl = document.querySelector(".feedbacks");
   const spinnerEl = document.querySelector(".spinner");
+  const hashtagsUl = document.querySelector(".hashtags");
+
   counterEl.textContent = MAX_LENGTH_ALLOWED;
   setCounter(counterEl, textareaEl);
   setForm(formEl, textareaEl, counterEl, feedbacksListEl, submitBtn);
   loadFeedbacks(feedbacksListEl, spinnerEl);
   setFeedbacksListEl(feedbacksListEl);
+  setHashtags(hashtagsUl, feedbacksListEl);
+}
+
+function setHashtags(hashtagsUl, feedbacksListEl) {
+  hashtagsUl.addEventListener("click", handleHastagsClick);
+
+  function handleHastagsClick(e) {
+    if (!e.target.closest(".hashtag")) return;
+
+    const { textContent: hashtagName } = e.target;
+
+    if (hashtagName.toUpperCase() === "ALL") {
+      renderFeedbacks(feedbacksArr, feedbacksListEl);
+      return;
+    }
+
+    const filteredFeedbacks = feedbacksArr.filter((feedback) =>
+      feedback.text.toLowerCase().includes(hashtagName.toLowerCase())
+    );
+
+    renderFeedbacks(filteredFeedbacks, feedbacksListEl);
+  }
 }
 
 function setFeedbacksListEl(feedbacksListEl) {
@@ -41,7 +65,8 @@ function loadFeedbacks(feedbacksListEl, spinnerEl) {
     .then((response) => response.json())
     .then((data) => {
       const { feedbacks } = data;
-      renderFeedbacks(feedbacks);
+      feedbacksArr = [...feedbacks];
+      renderFeedbacks(feedbacksArr, feedbacksListEl);
     })
     .catch((e) => {
       feedbacksListEl.innerHTML = `<p class="error-msg">Falied to fetch feedback items. Error message: ${e.message}</p>`;
@@ -49,12 +74,12 @@ function loadFeedbacks(feedbacksListEl, spinnerEl) {
     .finally(() => {
       spinnerEl.remove();
     });
+}
 
-  function renderFeedbacks(feedbacks) {
-    feedbacksListEl.innerHTML = feedbacks
-      .map((feedback) => createFeedbackItem(feedback))
-      .join("");
-  }
+function renderFeedbacks(feedbacks, feedbacksListEl) {
+  feedbacksListEl.innerHTML = feedbacks
+    .map((feedback) => createFeedbackItem(feedback))
+    .join("");
 }
 
 function postFeedback(feedback) {
