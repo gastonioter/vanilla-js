@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", init);
 
 const MAX_LENGTH_ALLOWED = 155;
+const BASE_API = "https://bytegrad.com/course-assets/js/1/api";
 
 function init() {
   const textareaEl = document.querySelector(".form__textarea");
@@ -11,15 +12,32 @@ function init() {
   const spinnerEl = document.querySelector(".spinner");
   counterEl.textContent = MAX_LENGTH_ALLOWED;
   setCounter(counterEl, textareaEl);
-  setForm(formEl, textareaEl, counterEl);
-  loadRemoteFeedbacks(feedbacksListEl, spinnerEl);
+  setForm(formEl, textareaEl, counterEl, feedbacksListEl, submitBtn);
+  loadFeedbacks(feedbacksListEl, spinnerEl);
+  setFeedbacksListEl(feedbacksListEl);
 }
 
-const URL = "https://bytegrad.com/course-assets/js/1/api/feedbacks";
-function loadRemoteFeedbacks(feedbacksListEl, spinnerEl) {
-  let isLoading = true;
+function setFeedbacksListEl(feedbacksListEl) {
+  feedbacksListEl.addEventListener("click", handleListClick);
 
-  fetch(URL)
+  function handleListClick(e) {
+    const clickedEl = e.target;
+
+    if (clickedEl.closest(".upvote")) {
+      const upvote = clickedEl.closest(".upvote");
+      upvote.disabled = true;
+      const upvoteEl = upvote.querySelector(".upvote__count");
+      const countValue = +upvoteEl.textContent;
+      upvoteEl.textContent = ++countValue;
+      return;
+    }
+
+    const feedbackEl = clickedEl.closest(".feedback");
+    feedbackEl.classList.toggle("feedback--expand");
+  }
+}
+function loadFeedbacks(feedbacksListEl, spinnerEl) {
+  fetch(`${BASE_API}/feedbacks`)
     .then((response) => response.json())
     .then((data) => {
       const { feedbacks } = data;
@@ -40,10 +58,19 @@ function loadRemoteFeedbacks(feedbacksListEl, spinnerEl) {
 }
 
 function postFeedback(feedback) {
-  fetch(URL, {
+  fetch(`${BASE_API}/feedbacks`, {
     method: "POST",
     body: JSON.stringify(feedback),
-  });
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw Error("failed to send your feedback");
+    })
+    .catch((e) => {
+      alert(e.message);
+    });
 }
 
 function setCounter(counterEl, textareaEl) {
@@ -63,7 +90,7 @@ function setCounter(counterEl, textareaEl) {
   }
 }
 
-function setForm(formEl, textareaEl, counterEl, feedbacksListEl) {
+function setForm(formEl, textareaEl, counterEl, feedbacksListEl, submitBtn) {
   formEl.addEventListener("submit", handleSubmit);
 
   function handleSubmit(e) {
