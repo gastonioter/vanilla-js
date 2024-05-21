@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", init);
 const MAX_LENGTH_ALLOWED = 155;
 const BASE_API = "https://bytegrad.com/course-assets/js/1/api";
 let feedbacksArr = [];
+
+
 function init() {
   const textareaEl = document.querySelector(".form__textarea");
   const counterEl = document.querySelector(".counter");
