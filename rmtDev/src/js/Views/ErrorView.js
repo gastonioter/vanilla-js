@@ -1,4 +1,4 @@
-import AbstractView from "../utils/AbstractView";
+import AbstractView from "./AbstractView";
 
 class Error {
   #parentEl = document.querySelector(".error");

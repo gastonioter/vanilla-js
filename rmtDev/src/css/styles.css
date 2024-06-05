@@ -134,6 +134,7 @@ input {
   left: 0;
   z-index: -1;
   user-select: none;
+
   transform: scale(1.1);
 }
 
@@ -148,12 +149,12 @@ input {
 .header__top {
   display: flex;
   align-items: center;
-  justify-content: center;
   max-width: 1000px;
   padding: 0 12px;
   margin: 0 auto;
   padding-top: 12px;
   position: relative;
+  justify-content: center;
   padding-top: 40px;
 
   animation: intro 0.3s;
@@ -239,7 +240,8 @@ input {
 /* JOB LIST */
 .job-list {
   background-color: #fff;
-
+  overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-color: #cacdd0 #ffffff; /* Firefox */
   scrollbar-width: thin; /* Firefox */
 }
@@ -572,7 +574,7 @@ input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 1px;
+  padding: 1rem;
   border-top: 1px solid #e8edf0;
 }
 

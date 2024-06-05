@@ -3,7 +3,9 @@ import getJSON from "../utils/getJSON";
 export function ApiServices(URL) {
   async function fetchResources(resource) {
     try {
-      const data = getJSON(`${URL}/${resource}`);
+      const data = await getJSON(`${URL}/${resource}`);
+      
+
       return data;
     } catch (e) {
       throw new Error(e);

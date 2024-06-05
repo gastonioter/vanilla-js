@@ -1,4 +1,4 @@
-import AbstractModel from "../utils/AbstractModel";
+import AbstractModel from "./AbstractModel";
 
 class SearchModel extends AbstractModel {
   #query = "";
