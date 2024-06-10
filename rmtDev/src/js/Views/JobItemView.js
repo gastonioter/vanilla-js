@@ -13,7 +13,7 @@ class JobItemView {
     salary,
   }) {
     return `<li class="job-item">
-    <a class="job-item__link" href="#${id}">
+    <a class="job-item__link" href="/${id}">
         <div class="job-item__badge">${badgeLetters}</div>
         <div class="job-item__middle">
             <h3 class="third-heading">${title}</h3>

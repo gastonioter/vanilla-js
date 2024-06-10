@@ -25,9 +25,10 @@ class JobModel extends AbstractModel {
 
       const { jobItem } = data;
       this.setSelectedJob(jobItem);
+
       this.notify("selected", { selectedJob: this.#selectedJob });
     } catch (e) {
-      console.log(e);
+      throw Error(e);
     } finally {
     }
   }

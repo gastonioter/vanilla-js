@@ -28,13 +28,38 @@ class JobsController {
       "selected",
       this.#jobDetailsView.renderContent.bind(this.#jobDetailsView)
     );
+
+    window.addEventListener("popstate", async (e) => {
+      if (!e?.state?.id) return;
+
+      try {
+        this.#jobDetailsView.renderSpinner();
+        await this.#jobModel.fetchJob(e?.state?.id);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", async (e) => {
+      console.log("firedd");
+
+      if (location.pathname === "/") return;
+
+      try {
+        this.#jobDetailsView.renderSpinner();
+        await this.#jobModel.fetchJob(location.pathname.slice(1));
+      } catch (e) {
+        console.log(e);
+      }
+    });
   }
 
-  async _clickJobItemHandler() {
-    const id = window.location.hash.slice(1);
+  async _clickJobItemHandler(path) {
     try {
+      const id = path.slice(1);
       this.#jobDetailsView.renderSpinner();
       await this.#jobModel.fetchJob(id);
+      history.pushState({ id }, null, path);
     } catch (e) {
       console.log(e);
     }

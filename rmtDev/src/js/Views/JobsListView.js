@@ -30,9 +30,7 @@ class JobsListView {
 
       itemEl.classList.add("job-item--active");
 
-      window.location.href = linkEl.href;
-
-      onJobClickItem();
+      onJobClickItem(linkEl.getAttribute("href"));
     });
   }
 

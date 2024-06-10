@@ -16,7 +16,7 @@ class SearchModel extends AbstractModel {
     }
   }
 
-  //TODO: query validations
+ 
   _validate(value) {
     let errorMsg = "";
     if (/[\d]/.test(value)) {
