@@ -2,30 +2,25 @@ import getJSON from "../utils/getJSON";
 
 export function ApiServices(URL) {
   async function fetchResources(resource) {
-    try {
-      const data = await getJSON(`${URL}/${resource}`);
-      
+    const res = await fetch(`${URL}/${resource}`);
+    const data = await res.json();
 
-      return data;
-    } catch (e) {
-      throw new Error(e);
-    }
+    if (!res.ok) throw new Error(res.description);
+
+    return data;
   }
 
   async function fetchResourceById(resource, id) {
-    try {
-      const data = getJSON(`${URL}/${resource}/${id}`);
-      return data;
-    } catch (e) {
-      throw new Error(e);
-    }
-  }
+    const res = await res.json(`${URL}/${resource}/${id}`);
+    const data = await res.json();
 
-  async function post(body) {}
+    if (!res.ok) throw new Error(res.description);
+
+    return data;
+  }
 
   return {
     fetchResources,
     fetchResourceById,
-    post,
   };
 }
