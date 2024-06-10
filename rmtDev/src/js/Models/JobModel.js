@@ -14,9 +14,9 @@ class JobModel extends AbstractModel {
 
       this.notify("fetchSuccess", { jobs: this.#jobs });
     } catch (e) {
-      console.log(e);
-    } finally {
-    }
+      throw new Error(e);
+      
+    } 
   }
 
   async fetchJob(id) {
@@ -28,8 +28,7 @@ class JobModel extends AbstractModel {
 
       this.notify("selected", { selectedJob: this.#selectedJob });
     } catch (e) {
-      throw Error(e);
-    } finally {
+      throw new Error(e);
     }
   }
 

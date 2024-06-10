@@ -26,32 +26,28 @@ class JobsController {
     );
     this.#jobModel.subscribe(
       "selected",
-      this.#jobDetailsView.renderContent.bind(this.#jobDetailsView)
+      this.#jobDetailsView.render.bind(this.#jobDetailsView)
     );
 
-    window.addEventListener("popstate", async (e) => {
-      if (!e?.state?.id) return;
-
-      try {
-        this.#jobDetailsView.renderSpinner();
-        await this.#jobModel.fetchJob(e?.state?.id);
-      } catch (e) {
-        console.log(e);
-      }
+    ["popstate", "DOMContentLoaded"].forEach((event) => {
+      window.addEventListener(event, this._loadJobDetailsFromURL.bind(this));
     });
+  }
 
-    document.addEventListener("DOMContentLoaded", async (e) => {
-      console.log("firedd");
+  async _loadJobDetailsFromURL() {
+    const id = location.pathname.slice(1);
 
-      if (location.pathname === "/") return;
+    if (!id) return;
 
-      try {
-        this.#jobDetailsView.renderSpinner();
-        await this.#jobModel.fetchJob(location.pathname.slice(1));
-      } catch (e) {
-        console.log(e);
-      }
-    });
+    try {
+      this.#jobDetailsView.renderSpinner();
+      await this.#jobModel.fetchJob(id);
+    } catch (e) {
+      this.#errorView.render(
+        "Sorry...",
+        "Something went wrong fetching the job! Try later"
+      );
+    }
   }
 
   async _clickJobItemHandler(path) {
@@ -59,9 +55,12 @@ class JobsController {
       const id = path.slice(1);
       this.#jobDetailsView.renderSpinner();
       await this.#jobModel.fetchJob(id);
-      history.pushState({ id }, null, path);
+      history.pushState(null, "", path);
     } catch (e) {
-      console.log(e);
+      this.#errorView.render(
+        "Sorry...",
+        "Something went wrong fetching the job! Try later"
+      );
     }
   }
 
@@ -73,8 +72,8 @@ class JobsController {
       this.#searchBarView.clearInput();
     } catch (e) {
       console.log(e);
-
       this.#errorView.render("Invalid Search", e.message);
+      this.#jobsListView.hiddeSpinner();
     }
   }
 }

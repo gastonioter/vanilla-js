@@ -84,8 +84,7 @@ class JobDetailsView {
     <p class="job-details__footer-text">If possible, please reference that you found the job on <span class="u-bold">rmtDev</span>, we would really appreciate it!</p>
 </footer>`;
   }
-  renderContent({ selectedJob }) {
-    console.log(selectedJob);
+  render({ selectedJob }) {
 
     this._clear();
     this.hiddeSpinner();

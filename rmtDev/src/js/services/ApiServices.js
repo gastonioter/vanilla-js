@@ -11,7 +11,7 @@ export function ApiServices(URL) {
   }
 
   async function fetchResourceById(resource, id) {
-    const res = await res.json(`${URL}/${resource}/${id}`);
+    const res = await fetch(`${URL}/${resource}/${id}`);
     const data = await res.json();
 
     if (!res.ok) throw new Error(res.description);

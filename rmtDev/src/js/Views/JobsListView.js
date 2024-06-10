@@ -43,7 +43,7 @@ class JobsListView {
   render({ jobs }) {
     if (!jobs) return;
     this.hiddeSpinner();
-    this.#jobsArray = jobs;
+    this.#jobsArray = jobs.slice(0, 7);
     const html = this._createMarkup();
 
     this.#parentEl.innerHTML = html;
