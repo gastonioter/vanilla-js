@@ -26,7 +26,7 @@ class JobItemView {
         </div>
         <div class="job-item__right">
             <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
-            <time class="job-item__time">${daysAgo}</time>
+            <time class="job-item__time">${daysAgo}d</time>
         </div>
     </a>
 </li>`;

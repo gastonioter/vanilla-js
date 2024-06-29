@@ -5,6 +5,7 @@ import CountJobsView from "../Views/CountJobsView";
 import JobModel from "../Models/JobModel";
 import JobsListView from "../Views/JobsListView";
 import JobDetailsView from "../Views/JobDetailsView";
+import PaginationView from "../Views/PaginationView";
 
 class JobsController {
   #searchBarView = new SearchBarView(this._submitFormHandler.bind(this));
@@ -14,6 +15,7 @@ class JobsController {
   #searchModel = new SearchModel();
   #jobModel = new JobModel();
   #jobDetailsView = new JobDetailsView();
+  
 
   constructor() {
     this.#jobModel.subscribe(
@@ -32,7 +34,11 @@ class JobsController {
     ["popstate", "DOMContentLoaded"].forEach((event) => {
       window.addEventListener(event, this._loadJobDetailsFromURL.bind(this));
     });
+
+    
   }
+
+ 
 
   async _loadJobDetailsFromURL() {
     const id = location.pathname.slice(1);
@@ -50,9 +56,9 @@ class JobsController {
     }
   }
 
-  async _clickJobItemHandler(path) {
+  async _clickJobItemHandler(hash) {
     try {
-      const id = path.slice(1);
+      const id = hash.slice(1);
       this.#jobDetailsView.renderSpinner();
       await this.#jobModel.fetchJob(id);
       history.pushState(null, "", path);
@@ -78,6 +84,6 @@ class JobsController {
   }
 }
 
-const app = new JobsController();
+//const app = new JobsController();
 
 export default JobsController;
