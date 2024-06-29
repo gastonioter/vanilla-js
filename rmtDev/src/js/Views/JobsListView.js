@@ -8,11 +8,14 @@ class JobsListView {
   #sortingEl = document.querySelector(".sorting");
   #backBtnEl = this.#paginationEl.querySelector(".pagination__button--back");
   #nextBtnEl = this.#paginationEl.querySelector(".pagination__button--next");
+
+  #listEl = document.querySelector(".job-list--bookmarks");
   #currentPage = 0;
   #jobsPerPage = 7;
 
-  constructor(onJobClickItem) {
-    this._addClickListener(onJobClickItem);
+  constructor(onJobClickItem, onBookmarkClick) {
+    this._listenJobClick(onJobClickItem, onBookmarkClick);
+
     this.#backBtnEl.addEventListener("click", this._back.bind(this));
     this.#nextBtnEl.addEventListener("click", this._next.bind(this));
     this.#sortingEl.addEventListener("click", this._sortingHandler.bind(this));
@@ -27,21 +30,49 @@ class JobsListView {
     this.#spinnerEl.classList.remove("spinner--visible");
   }
 
-  _addClickListener(onJobClickItem) {
-    this.#parentEl.addEventListener("click", (e) => {
-      e.preventDefault();
+  _listenJobClick(onJobClickItem, onBookmarkClick) {
+    this.#parentEl.addEventListener("click", handler(this.#parentEl));
+    this.#listEl.addEventListener("click", handler(this.#listEl));
 
-      const itemEl = e.target.closest(".job-item");
-      const linkEl = itemEl.querySelector(".job-item__link");
+    function handler(parentList) {
+      return function (e) {
+        e.preventDefault();
 
-      this.#parentEl
-        .querySelector(".job-item--active")
-        ?.classList.remove("job-item--active");
+        const itemEl = e.target.closest(".job-item");
+        const linkEl = itemEl.querySelector(".job-item__link");
 
-      itemEl.classList.add("job-item--active");
+        if (!itemEl) return;
 
-      onJobClickItem(linkEl.getAttribute("href"));
-    });
+        if (e.target.className.includes("job-item__bookmark-icon")) {
+          onBookmarkClick(linkEl.getAttribute("href"));
+
+          return;
+        }
+
+        parentList
+          .querySelector(".job-item--active")
+          ?.classList.remove("job-item--active");
+
+        itemEl.classList.add("job-item--active");
+
+        onJobClickItem(linkEl.getAttribute("href"));
+      };
+    }
+  }
+
+  renderBookmarks() {
+    this.#listEl.innerHTML = "";
+
+    this.#parentEl
+      .querySelectorAll(".job-item__bookmark-icon--bookmarked")
+      .forEach((el) => {
+        
+
+        this.#listEl.insertAdjacentElement(
+          "afterbegin",
+          el.closest(".job-item").cloneNode(true)
+        );
+      });
   }
 
   _createMarkup(filteredJobs) {
@@ -72,7 +103,6 @@ class JobsListView {
   _filterJobs() {
     const startIndex = this.#currentPage * this.#jobsPerPage;
     const endIndex = startIndex + this.#jobsPerPage;
-    console.log(startIndex, endIndex);
 
     return this.#jobsArray.slice(startIndex, endIndex);
   }

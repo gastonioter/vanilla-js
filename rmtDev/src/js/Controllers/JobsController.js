@@ -5,27 +5,36 @@ import CountJobsView from "../Views/CountJobsView";
 import JobModel from "../Models/JobModel";
 import JobsListView from "../Views/JobsListView";
 import JobDetailsView from "../Views/JobDetailsView";
-import PaginationView from "../Views/PaginationView";
+import BookmarksView from "../Views/BookmarksView";
 
 class JobsController {
-  #searchBarView = new SearchBarView(this._submitFormHandler.bind(this));
-  #jobsListView = new JobsListView(this._clickJobItemHandler.bind(this));
+  #searchBarView = new SearchBarView(this._handleFormSubmit.bind(this));
+  #jobsListView = new JobsListView(
+    this._handleClickJobItem.bind(this),
+    this._handleBookmarkClick.bind(this)
+  );
   #errorView = new ErrorView();
   #countJobsView = new CountJobsView();
   #searchModel = new SearchModel();
   #jobModel = new JobModel();
   #jobDetailsView = new JobDetailsView();
-  
+  #bookmarksView = new BookmarksView();
 
   constructor() {
     this.#jobModel.subscribe(
-      "fetchSuccess",
+      "jobListUpdated",
       this.#countJobsView.render.bind(this.#countJobsView)
     );
     this.#jobModel.subscribe(
-      "fetchSuccess",
+      "jobListUpdated",
       this.#jobsListView.render.bind(this.#jobsListView)
     );
+
+    this.#jobModel.subscribe(
+      "bookmarked",
+      this.#jobsListView.renderBookmarks.bind(this.#jobsListView)
+    );
+
     this.#jobModel.subscribe(
       "selected",
       this.#jobDetailsView.render.bind(this.#jobDetailsView)
@@ -34,11 +43,7 @@ class JobsController {
     ["popstate", "DOMContentLoaded"].forEach((event) => {
       window.addEventListener(event, this._loadJobDetailsFromURL.bind(this));
     });
-
-    
   }
-
- 
 
   async _loadJobDetailsFromURL() {
     const id = location.pathname.slice(1);
@@ -56,7 +61,7 @@ class JobsController {
     }
   }
 
-  async _clickJobItemHandler(hash) {
+  async _handleClickJobItem(hash) {
     try {
       const id = hash.slice(1);
       this.#jobDetailsView.renderSpinner();
@@ -70,7 +75,12 @@ class JobsController {
     }
   }
 
-  async _submitFormHandler(query) {
+  _handleBookmarkClick(hash) {
+    const id = hash.slice(1);
+    this.#jobModel.setBookmark(id);
+  }
+
+  async _handleFormSubmit(query) {
     try {
       this.#searchModel.query = query;
       this.#jobsListView.showSpinner();

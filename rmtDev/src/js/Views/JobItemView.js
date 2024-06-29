@@ -1,4 +1,5 @@
 class JobItemView {
+  // pintar el bookmark si esta guardado
   getHTML({
     badgeLetters,
     company,
@@ -11,6 +12,7 @@ class JobItemView {
     location,
     title,
     salary,
+    bookmarked,
   }) {
     return `<li class="job-item">
     <a class="job-item__link" href="/${id}">
@@ -25,7 +27,9 @@ class JobItemView {
             </div>
         </div>
         <div class="job-item__right">
-            <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
+            <i class="fa-solid fa-bookmark job-item__bookmark-icon${
+              bookmarked ? "--bookmarked" : ""
+            }"></i>
             <time class="job-item__time">${daysAgo}d</time>
         </div>
     </a>
