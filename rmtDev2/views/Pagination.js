@@ -16,7 +16,7 @@ let currentPage = 1;
 Jobs.addObserver("jobschanged", () => {
   totalJobs = Jobs.jobs.length;
   totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
-  go(1);
+  go(currentPage);
 });
 
 nextBtn.addEventListener("click", next);

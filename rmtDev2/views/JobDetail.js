@@ -1,4 +1,6 @@
+import { isBookmarked, toggleBookmark } from "../app/bookmarks.js";
 import { findJobById } from "../services/jobsAPI.js";
+import Jobs from "../store/Jobs.js";
 import { interpolate } from "../utils/interpolate.js";
 import Spinner from "./Spinner.js";
 
@@ -14,6 +16,7 @@ export class JobDetail extends HTMLElement {
   connectedCallback() {
     this.appendChild(this.template.content.cloneNode(true));
     this.jobId = this.dataset.id;
+    Jobs.addObserver("jobschanged", this.render.bind(this));
     this.innerHTML = "";
     this.render();
   }
@@ -73,8 +76,17 @@ export class JobDetail extends HTMLElement {
         "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1272&h=348&q=100",
       companyURL: "https://fictionalcomputerhaverwebsite.com",
       badgeBgColor: "#3d87f1",
-      bookmarked: true ? "job-info__bookmark-icon--bookmarked" : "",
+      bookmarked: isBookmarked(this.jobId)
+        ? "job-info__bookmark-icon--bookmarked"
+        : "",
     });
+
+    this.querySelector(".job-info__bookmark-btn").addEventListener(
+      "click",
+      () => {
+        toggleBookmark(this.jobId);
+      }
+    );
 
     //this.addEventListener('click', )
   }

@@ -8,6 +8,7 @@ export class JobItem extends HTMLElement {
   }
 
   connectedCallback() {
+    const job = JSON.parse(this.dataset.job);
     const {
       badgeLetters,
       company,
@@ -20,7 +21,7 @@ export class JobItem extends HTMLElement {
       location,
       title,
       salary,
-    } = JSON.parse(this.dataset.job);
+    } = job;
 
     this.innerHTML = interpolate(this.template.innerHTML, {
       badgeLetters,
@@ -34,7 +35,7 @@ export class JobItem extends HTMLElement {
       location,
       title,
       salary,
-      bookmarked: true ? "job-info__bookmark-icon--bookmarked" : "",
+      bookmarked: job.bookmarked ? "job-info__bookmark-icon--bookmarked" : "",
     });
 
     this.addEventListener("click", (e) => {

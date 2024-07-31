@@ -296,6 +296,13 @@ input {
   opacity: 1;
 }
 
+.job-list--bookmarks--show {
+  pointer-events: initial;
+  visibility: initial;
+  transform: scale(1) translateX(-50%);
+  opacity: 1;
+}
+
 .job-list--bookmarks::before {
   content: "Nothing bookmarked yet...";
   position: absolute;

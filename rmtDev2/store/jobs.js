@@ -1,7 +1,6 @@
 import observerMixin from "../mixins/observerMixin.js";
 import { loadJobs } from "../services/jobsAPI.js";
 
-
 const Jobs = {
   jobs: [],
 
@@ -15,8 +14,6 @@ const Jobs = {
     const { jobItems: jobs } = await loadJobs(query);
     this.setJobs(jobs);
   },
-
-  
 };
 
 Object.assign(Jobs, observerMixin);

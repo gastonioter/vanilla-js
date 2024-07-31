@@ -2,7 +2,8 @@ import Router from "./Router.js";
 import "./views/SearchBar.js";
 import "./views/JobList.js";
 import "./views/JobDetail.JS";
-import './views/Sidebar.js'
+import "./views/Sidebar.js";
+import "./views/Bookmarks.js";
 
 document.addEventListener("DOMContentLoaded", init);
 
