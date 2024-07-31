@@ -20,7 +20,6 @@ export class JobItem extends HTMLElement {
       location,
       title,
       salary,
-      bookmarked,
     } = JSON.parse(this.dataset.job);
 
     this.innerHTML = interpolate(this.template.innerHTML, {
@@ -35,7 +34,7 @@ export class JobItem extends HTMLElement {
       location,
       title,
       salary,
-      bookmarked,
+      bookmarked: true ? "job-info__bookmark-icon--bookmarked" : "",
     });
 
     this.addEventListener("click", (e) => {

@@ -1,31 +1,22 @@
-const jobsSplit = {
-  results: [],
-};
+import observerMixin from "../mixins/observerMixin.js";
+import { loadJobs } from "../services/jobsAPI.js";
 
-const handler = {
-  set(target, prop, value) {
-    target[prop] = value;
 
-    if (prop == "results") {
-      notify("jobs", {
-        status: "success",
-        data: value,
-      });
-    }
+const Jobs = {
+  jobs: [],
 
-    return true;
+  setJobs(value) {
+    this.jobs = value;
+    this.notify("loadedjobs");
+  },
+
+  async fetchJobs(query) {
+    this.notify("fetchingjobs");
+    const { jobItems: jobs } = await loadJobs(query);
+    this.setJobs(jobs);
   },
 };
 
-function notify(event, { status, data } = {}) {
-  window.dispatchEvent(
-    new CustomEvent(event, {
-      detail: {
-        status,
-        data,
-      },
-    })
-  );
-}
-const Jobs = new Proxy(jobsSplit, handler);
+Object.assign(Jobs, observerMixin);
+
 export default Jobs;

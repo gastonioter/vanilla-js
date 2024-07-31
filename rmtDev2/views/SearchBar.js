@@ -1,5 +1,4 @@
-import proxiedQuery from "../store/query.js";
-
+import Jobs from "../store/jobs.js";
 const form = document.querySelector(".search");
 
 render();
@@ -21,7 +20,7 @@ function handleSubmit(e) {
 
   const { query } = data;
 
-  proxiedQuery.value = query;
+  Jobs.fetchJobs(query);
 
   form.elements[1].value = "";
 }
