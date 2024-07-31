@@ -7,7 +7,7 @@ const Jobs = {
 
   setJobs(value) {
     this.jobs = value;
-    this.notify("loadedjobs");
+    this.notify("jobschanged");
   },
 
   async fetchJobs(query) {
@@ -15,6 +15,8 @@ const Jobs = {
     const { jobItems: jobs } = await loadJobs(query);
     this.setJobs(jobs);
   },
+
+  
 };
 
 Object.assign(Jobs, observerMixin);

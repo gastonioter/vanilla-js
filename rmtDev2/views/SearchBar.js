@@ -1,4 +1,4 @@
-import Jobs from "../store/jobs.js";
+import Jobs from "../store/Jobs.js";
 const form = document.querySelector(".search");
 
 render();

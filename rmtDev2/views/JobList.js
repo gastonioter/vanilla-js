@@ -1,5 +1,6 @@
-import Jobs from "../store/jobs.js";
+import Jobs from "../store/Jobs.js";
 import "./JobItem.js";
+import { getPage } from "./Pagination.js";
 import Spinner from "./Spinner.js";
 
 const spinner = Spinner(".spinner--search");
@@ -7,17 +8,18 @@ const spinner = Spinner(".spinner--search");
 const ul = document.querySelector(".job-list--search");
 
 Jobs.addObserver("fetchingjobs", () => {
+  ul.innerHTML = "";
   spinner.render();
 });
 
-Jobs.addObserver("loadedjobs", renderList);
+Jobs.addObserver("jobschanged", renderList);
 
-function renderList() {
+export function renderList() {
   ul.innerHTML = "";
   spinner.hidde();
-  console.log(Jobs.jobs);
+  const { start, end } = getPage();
 
-  Jobs.jobs.slice(0, 7).forEach((job) => {
+  Jobs.jobs.slice(start, end).forEach((job) => {
     const jobEl = document.createElement("job-item");
     jobEl.dataset.job = JSON.stringify(job);
     ul.appendChild(jobEl);

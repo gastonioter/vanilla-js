@@ -3,7 +3,7 @@ const observerMixin = {
 
   addObserver(event, obs) {
     this.observers[event] = this.observers[event]
-      ? this.observers[event].push(obs)
+      ? [...this.observers[event], obs]
       : [obs];
   },
 
@@ -18,4 +18,4 @@ const observerMixin = {
   },
 };
 
-export default observerMixin
+export default observerMixin;
