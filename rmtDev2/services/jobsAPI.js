@@ -18,12 +18,14 @@ export function findJobById() {
       `https://bytegrad.com/course-assets/js/2/api/jobs/${id}`
     );
 
+    if (!res.ok) {
+      return false;
+    }
     const { jobItem: job } = await res.json();
 
     console.log(job);
 
     cache[id] = job;
-    console.log(cache);
 
     return cache[id];
   };

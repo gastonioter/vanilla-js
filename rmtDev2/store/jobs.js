@@ -1,5 +1,4 @@
 const jobsSplit = {
-  selected: null,
   results: [],
 };
 
@@ -7,17 +6,26 @@ const handler = {
   set(target, prop, value) {
     target[prop] = value;
 
-    window.dispatchEvent(
-      new CustomEvent("jobs", {
-        detail: {
-          status: "success",
-          data: value,
-        },
-      })
-    );
+    if (prop == "results") {
+      notify("jobs", {
+        status: "success",
+        data: value,
+      });
+    }
 
     return true;
   },
 };
+
+function notify(event, { status, data } = {}) {
+  window.dispatchEvent(
+    new CustomEvent(event, {
+      detail: {
+        status,
+        data,
+      },
+    })
+  );
+}
 const Jobs = new Proxy(jobsSplit, handler);
 export default Jobs;

@@ -22,6 +22,20 @@ export class JobDetail extends HTMLElement {
     if (!this.jobId) return;
 
     this.spinner.render();
+    const response = await findJobFn(this.jobId);
+
+    if (!response) {
+      this.innerHTML = `<div class="job-details__start-view">
+              <p class="job-details__start-text job-details__start-text--big">
+                That job doesn't exists!
+              </p>
+              <p class="job-details__start-text job-details__start-text">
+                Search for any technology...</p>
+            </div>`;
+      this.spinner.hidde();
+      return;
+    }
+
     const {
       description,
       title,
@@ -35,7 +49,7 @@ export class JobDetail extends HTMLElement {
       daysAgo,
       companyURL,
       coverImgURL,
-    } = await findJobFn(this.jobId);
+    } = response;
 
     this.spinner.hidde();
     this.innerHTML = interpolate(this.template.innerHTML, {
