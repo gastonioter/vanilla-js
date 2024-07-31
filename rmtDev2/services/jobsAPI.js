@@ -8,11 +8,23 @@ export async function loadJobs(query) {
   return data;
 }
 
-export async function findJobById(id) {
-  const res = await fetch(
-    `https://bytegrad.com/course-assets/js/2/api/jobs/${id}`
-  );
+export function findJobById() {
+  const cache = {};
 
-  const { jobItem: job } = await res.json();
-  return job;
+  return async function (id) {
+    if (cache[id]) return cache[id];
+
+    const res = await fetch(
+      `https://bytegrad.com/course-assets/js/2/api/jobs/${id}`
+    );
+
+    const { jobItem: job } = await res.json();
+
+    console.log(job);
+
+    cache[id] = job;
+    console.log(cache);
+
+    return cache[id];
+  };
 }

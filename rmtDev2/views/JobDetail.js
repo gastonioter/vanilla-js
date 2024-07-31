@@ -2,6 +2,8 @@ import { findJobById } from "../services/jobsAPI.js";
 import { interpolate } from "../utils/interpolate.js";
 import Spinner from "./Spinner.js";
 
+const findJobFn = findJobById();
+
 export class JobDetail extends HTMLElement {
   constructor() {
     super();
@@ -33,7 +35,7 @@ export class JobDetail extends HTMLElement {
       daysAgo,
       companyURL,
       coverImgURL,
-    } = await findJobById(this.jobId);
+    } = await findJobFn(this.jobId);
 
     this.spinner.hidde();
     this.innerHTML = interpolate(this.template.innerHTML, {
